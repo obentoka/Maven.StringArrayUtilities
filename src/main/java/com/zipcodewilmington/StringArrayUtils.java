@@ -1,5 +1,6 @@
 package com.zipcodewilmington;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -59,12 +60,9 @@ public class StringArrayUtils {
      */ // TODO
     public static String[] reverse(String[] array) {
         String[] reverseArray = new String[array.length];
-        int k = 0;
-        for(int i = array.length-1; i >= 0; i--){
-            reverseArray[k] = array[i];
-            if(k != array.length-1){
-                k++;
-            }
+        for(int i = 0; i <= array.length/2; i++){
+            reverseArray[i] = array[array.length - 1 - i];
+            reverseArray[reverseArray.length - 1 - i] = array[i];
         }
         return reverseArray;
     }
@@ -74,16 +72,7 @@ public class StringArrayUtils {
      * @return true if the order of the array is the same backwards and forwards
      */ // TODO
     public static boolean isPalindromic(String[] array) {
-        boolean isPali = false;
-        String[] reverseArray = reverse(array);
-        for(int i = 0; i < array.length; i++){
-            if(array[i].equals(reverseArray[i])){
-                isPali = true;
-            }else {
-                isPali = false;
-            }
-        }
-        return isPali;
+        return Arrays.equals(array, reverse(array));
     }
 
     /**
@@ -116,17 +105,9 @@ public class StringArrayUtils {
      * @return number of occurrences the specified `value` has occurred
      */ // TODO
     public static int getNumberOfOccurrences(String[] array, String value) {
-        int occurranceCounter = 0;
-        String arrayCheck = "";
-        for(int i = 0; i < array.length; i++){
-            arrayCheck = array[i].replace(value, "1");
-            for(int k = 0; k < arrayCheck.length(); k++){
-                if(arrayCheck.charAt(0) == '1'){
-                    occurranceCounter++;
-                }
-            }
-        }
-        return occurranceCounter;
+        return (int) Arrays.stream(array)
+                .filter(x -> x.equals(value))
+                .count();
     }
 
     /**
@@ -135,15 +116,9 @@ public class StringArrayUtils {
      * @return array with identical contents excluding values of `value`
      */ // TODO
     public static String[] removeValue(String[] array, String valueToRemove) {
-        String[] newArray = new String[array.length-1];
-        int newArrayCounter = 0;
-        for(int i = 0; i < array.length; i++){
-            if(!array[i].equals(valueToRemove)){
-                newArray[newArrayCounter] = array[i];
-                newArrayCounter++;
-            }
-        }
-        return newArray;
+        return Arrays.stream(array)
+                .filter(x -> !x.equals(valueToRemove))
+                .toArray(String[]::new);
     }
 
     /**
@@ -158,7 +133,9 @@ public class StringArrayUtils {
                 noDuplicateString += array[i] + " ";
             }
         }
+
         noDuplicateString += array[array.length-1];
+
         for(int i = 0; i < noDuplicateString.length(); i++){
             if(noDuplicateString.charAt(i) == ' ') {
                 occurance++;
